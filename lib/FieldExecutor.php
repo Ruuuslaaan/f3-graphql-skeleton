@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Lib;
 
-use App\Model\Api\GraphQL\Resolver;
 use Closure;
 use GraphQL\Executor\Executor;
 use GraphQL\Language\AST\NodeList;
@@ -20,7 +19,7 @@ class FieldExecutor extends Executor
         $fieldName = $info->fieldName;
 
         if (($resolverClass = (new self)->getFieldResolver($info->fieldDefinition)) && !empty($resolverClass)) {
-            /** @var Resolver $resolver */
+            /** @var AbstractResolver $resolver */
             $resolver = new $resolverClass();
             $property = $resolver->resolve($objectValue, $fieldName, $args);
 
