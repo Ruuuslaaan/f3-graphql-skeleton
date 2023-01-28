@@ -25,5 +25,6 @@
       "App\\": "app",
       "Lib\\": "lib"
     }
-  }
+  },
+  "minimum-stability": "stable"
 }
