@@ -7,6 +7,9 @@
       "email": "ruslan.yesenovski@gmail.com"
     }
   ],
+  "license": [
+    "GPL-3.0-or-later"
+  ],
   "require": {
     "php": ">=7.3",
     "ext-json": "*",
