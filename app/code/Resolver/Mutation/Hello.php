@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Resolver\Query;
+namespace App\Code\Resolver\Mutation;
 
 use Lib\AbstractResolver;
 
@@ -13,6 +13,6 @@ class Hello extends AbstractResolver
      */
     public function resolve($value, string $fieldName, array $args): string
     {
-        return 'Hello';
+        return $args['text'];
     }
 }

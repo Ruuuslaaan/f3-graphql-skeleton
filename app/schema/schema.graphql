@@ -4,9 +4,9 @@ schema {
 }
 
 type Query {
-    hello: String! @resolver(class: "\\App\\Resolver\\Query\\Hello")
+    hello: String! @resolver(class: "\\App\\Code\\Resolver\\Query\\Hello")
 }
 
 type Mutation {
-    hello(text: String!): String @resolver(class: "\\App\\Resolver\\Mutation\\Hello")
+    hello(text: String!): String @resolver(class: "\\App\\Code\\Resolver\\Mutation\\Hello")
 }

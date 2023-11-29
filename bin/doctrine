@@ -1,0 +1,13 @@
+<?php
+declare(strict_types=1);
+
+use App\DoctrineBootstrap;
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+$bootstrap = new DoctrineBootstrap();
+$doctrine = $bootstrap->init();
+
+ConsoleRunner::run(new SingleManagerProvider($doctrine));

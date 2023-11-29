@@ -1,12 +1,14 @@
 <?php
+declare(strict_types=1);
 
 namespace App;
 
 use Base;
-use DB\SQL;
+use Doctrine\DBAL\Exception as DoctrineDbalException;
+use Doctrine\ORM\Exception\MissingMappingDriverImplementation;
 use Exception;
 use GraphQL\GraphQL;
-use JsonException;
+use Lib\ConfigProvider;
 use Lib\FieldExecutor;
 use Lib\QueryParser;
 use Lib\SchemaBuilder;
@@ -14,22 +16,22 @@ use Lib\SchemaBuilder;
 class Bootstrap
 {
     /** @var Base */
-    private $f3;
-
-    /** @var array */
-    private $config;
+    private Base $f3;
 
     /**
      * @return void
      */
     public function run(): void
     {
-        $this->initF3()
-            ->initRoute()
-            ->parseConfig()
-            ->initDatabase();
+        try {
+            $this->initF3()
+                ->initRoute()
+                ->parseConfig()
+                ->initDatabase();
 
-        $this->f3->run();
+            $this->f3->run();
+        } catch (Exception $exception) {
+        }
     }
 
     /**
@@ -80,44 +82,24 @@ class Bootstrap
      */
     private function parseConfig(): self
     {
-        try {
-            $appPath = 'app';
-            $this->config = file_exists($appPath . DIRECTORY_SEPARATOR . 'config.local.json') ?
-                json_decode(
-                    file_get_contents($appPath . DIRECTORY_SEPARATOR . 'config.local.json'),
-                    true,
-                    512,
-                    JSON_THROW_ON_ERROR
-                ) : json_decode(
-                    file_get_contents($appPath . DIRECTORY_SEPARATOR . 'config.json'),
-                    true,
-                    512,
-                    JSON_THROW_ON_ERROR
-                );
+        $configParser = ConfigProvider::getInstance();
+        $config = $configParser->getConfig();
 
-            $this->f3->set('CONFIG', $this->config);
-        } catch (JsonException $e) {
-        }
+        $this->f3->set('CONFIG', $config);
 
         return $this;
     }
 
     /**
      * @return self
+     * @throws DoctrineDbalException
+     * @throws MissingMappingDriverImplementation
      */
     private function initDatabase(): self
     {
-        $db = new SQL(
-            sprintf(
-                'mysql:host=%s;port=%s;dbname=%s',
-                $this->config['database']['host'],
-                $this->config['database']['port'],
-                $this->config['database']['dbname']
-            ),
-            $this->config['database']['user'],
-            $this->config['database']['password']
-        );
-        $this->f3->set('DB', $db);
+        $doctrineBootstrap = new DoctrineBootstrap();
+        $doctrine = $doctrineBootstrap->init();
+        $this->f3->set('DB', $doctrine);
 
         return $this;
     }
