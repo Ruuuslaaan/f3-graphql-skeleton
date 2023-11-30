@@ -1,4 +1,5 @@
 .idea
 vendor
+.warden
 .env
 app/config.local.json

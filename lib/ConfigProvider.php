@@ -8,8 +8,8 @@ use RuntimeException;
 
 final class ConfigProvider
 {
-    /** @var self */
-    private static self $instance;
+    /** @var self|null */
+    private static ?self $instance = null;
 
     /**
      * @return self
