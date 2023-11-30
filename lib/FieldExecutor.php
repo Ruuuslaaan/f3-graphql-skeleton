@@ -5,7 +5,6 @@ namespace Lib;
 
 use Closure;
 use GraphQL\Executor\Executor;
-use GraphQL\Language\AST\NodeList;
 use GraphQL\Type\Definition\FieldDefinition;
 use GraphQL\Type\Definition\ResolveInfo;
 
@@ -49,7 +48,6 @@ class FieldExecutor extends Executor
      */
     private function getFieldResolver(FieldDefinition $fieldDefinition): string
     {
-        /** @var NodeList $directives */
         $directives = $fieldDefinition->astNode->directives;
         foreach ($directives as $directive) {
             if ($directive->name->value === 'resolver') {

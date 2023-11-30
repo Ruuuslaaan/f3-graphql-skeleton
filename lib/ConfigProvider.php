@@ -4,11 +4,12 @@ declare(strict_types=1);
 namespace Lib;
 
 use JsonException;
+use RuntimeException;
 
 final class ConfigProvider
 {
     /** @var self */
-    private static $instance;
+    private static self $instance;
 
     /**
      * @return self
@@ -46,10 +47,12 @@ final class ConfigProvider
      */
     private function getConfigFile(): string
     {
-        $appPath = 'app';
-        return file_exists($appPath . DIRECTORY_SEPARATOR . 'config.local.json') ?
-            $appPath . DIRECTORY_SEPARATOR . 'config.local.json' :
-            $appPath . DIRECTORY_SEPARATOR . 'config.json';
+        $configPath = 'app' . DIRECTORY_SEPARATOR . 'config.local.json';
+        if (!file_exists($configPath)) {
+            throw new RuntimeException('The config file does not exist.');
+        }
+
+         return $configPath;
     }
 
     private function __construct()

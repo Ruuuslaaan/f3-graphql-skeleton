@@ -20,11 +20,11 @@ class DoctrineBootstrap
     public function init(): EntityManager
     {
         $configParser = ConfigProvider::getInstance();
-        $appConfig = $configParser->getConfig()['database'];
-        $appConfig['driver'] = 'pdo_mysql';
+        $appConfig = $configParser->getConfig();
+        $appConfig['database']['driver'] = 'pdo_mysql';
 
-        $ormConfig = ORMSetup::createAttributeMetadataConfiguration(['app/code/Entity'], true);
-        $connection = DriverManager::getConnection($appConfig);
+        $ormConfig = ORMSetup::createAttributeMetadataConfiguration(['app/code/Entity'], $appConfig['devMode']);
+        $connection = DriverManager::getConnection($appConfig['database']);
 
         return new EntityManager($connection, $ormConfig);
     }

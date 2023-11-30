@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace App\Code\Resolver\Query;
 
-use Lib\AbstractResolver;
+use Lib\Api\ResolverInterface;
 
-class Hello extends AbstractResolver
+class Hello implements ResolverInterface
 {
     /**
      * @inheritDoc
